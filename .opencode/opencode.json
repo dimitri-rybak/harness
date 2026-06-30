@@ -1,0 +1,209 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "mlx": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MLX (lokal)",
+      "options": {
+        "baseURL": "http://localhost:8080/v1"
+      },
+      "models": {
+        "mlx-community/Qwen3-Coder-Next-8bit": {
+          "name": "Qwen3-Coder (MLX, 8-bit)"
+        }
+      }
+    },
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (lokal)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3.6": {
+          "name": "Qwen3.6 32B (Ollama)"
+        },
+        "llama3.2": {
+          "name": "Llama 3.2 3B (Ollama)"
+        },
+        "llama3.3:70b": {
+          "name": "Llama 3.3 70B (Ollama)"
+        },
+        "glm-5.2:cloud": {
+          "name": "GLM-5.2 (Cloud)"
+        }
+      }
+    }
+  },
+  "model": "mlx/mlx-community/Qwen3-Coder-Next-8bit",
+  "small_model": "ollama/llama3.2",
+  "default_agent": "build",
+  "instructions": [
+    "skills/tdd-workflow/SKILL.md",
+    "skills/security-review/SKILL.md",
+    "skills/coding-standards/SKILL.md"
+  ],
+  "skills": {
+    "paths": [
+      "skills"
+    ]
+  },
+  "agent": {
+    "build": {
+      "description": "Primary coding agent",
+      "mode": "primary",
+      "model": "mlx/mlx-community/Qwen3-Coder-Next-8bit",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "planner": {
+      "description": "Planungs-Spezialist für Features/Refactoring",
+      "mode": "subagent",
+      "model": "ollama/glm-5.2:cloud",
+      "prompt": "{file:prompts/agents/planner.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "code-reviewer": {
+      "description": "Code-Review (Qualität/Security/Wartbarkeit)",
+      "mode": "subagent",
+      "model": "ollama/glm-5.2:cloud",
+      "prompt": "{file:prompts/agents/code-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "security-reviewer": {
+      "description": "Security-Schwachstellen finden & beheben",
+      "mode": "subagent",
+      "model": "ollama/glm-5.2:cloud",
+      "prompt": "{file:prompts/agents/security-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "build-error-resolver": {
+      "description": "Build-/Typ-Fehler mit minimalen Diffs fixen",
+      "mode": "subagent",
+      "model": "mlx/mlx-community/Qwen3-Coder-Next-8bit",
+      "prompt": "{file:prompts/agents/build-error-resolver.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "tdd-guide": {
+      "description": "TDD-Workflow, 80%+ Coverage",
+      "mode": "subagent",
+      "model": "mlx/mlx-community/Qwen3-Coder-Next-8bit",
+      "prompt": "{file:prompts/agents/tdd-guide.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "gan-planner": {
+      "description": "GAN-Planner: Brief -> spec.md + eval-rubric.md",
+      "mode": "all",
+      "model": "ollama/glm-5.2:cloud",
+      "prompt": "{file:prompts/agents/gan-planner.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "gan-generator": {
+      "description": "GAN-Generator: baut nach Spec, iteriert auf Feedback",
+      "mode": "all",
+      "model": "mlx/mlx-community/Qwen3-Coder-Next-8bit",
+      "prompt": "{file:prompts/agents/gan-generator.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "gan-evaluator": {
+      "description": "GAN-Evaluator: testet & bewertet, schreibt Feedback",
+      "mode": "all",
+      "model": "ollama/glm-5.2:cloud",
+      "prompt": "{file:prompts/agents/gan-evaluator.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  },
+  "command": {
+    "plan": {
+      "description": "Implementierungsplan erstellen",
+      "template": "{file:commands/plan.md}\n\n$ARGUMENTS",
+      "agent": "planner",
+      "subtask": true
+    },
+    "code-review": {
+      "description": "Code-Review",
+      "template": "{file:commands/code-review.md}\n\n$ARGUMENTS",
+      "agent": "code-reviewer",
+      "subtask": true
+    },
+    "security": {
+      "description": "Security-Review",
+      "template": "{file:commands/security.md}\n\n$ARGUMENTS",
+      "agent": "security-reviewer",
+      "subtask": true
+    },
+    "build-fix": {
+      "description": "Build-Fehler beheben",
+      "template": "{file:commands/build-fix.md}\n\n$ARGUMENTS",
+      "agent": "build-error-resolver",
+      "subtask": true
+    },
+    "tdd": {
+      "description": "TDD-Workflow",
+      "template": "{file:commands/tdd.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subtask": true
+    },
+    "gan-build": {
+      "description": "GAN-Loop: Planner->Generator/Evaluator",
+      "template": "{file:commands/gan-build.md}\n\n$ARGUMENTS"
+    },
+    "gan-design": {
+      "description": "GAN-Design-Loop (ohne Planner)",
+      "template": "{file:commands/gan-design.md}\n\n$ARGUMENTS"
+    },
+    "gan-plan": {
+      "description": "NUR planen: Brief -> spec.md + eval-rubric.md (kein Build)",
+      "template": "Erzeuge aus folgendem Brief die volle Produkt-Spec nach gan-harness/spec.md und die Eval-Rubric nach gan-harness/eval-rubric.md. Baue NICHT, evaluiere NICHT.\n\n$ARGUMENTS",
+      "agent": "gan-planner",
+      "subtask": true
+    }
+  },
+  "permission": {
+    "mcp_*": "ask"
+  }
+}
