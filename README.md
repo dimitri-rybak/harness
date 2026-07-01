@@ -19,3 +19,4 @@ Eigenständiges, kuratiertes OpenCode-Setup — herausgelöst aus ECC, ohne Abh�
     opencode run --command gan-build "Brief: <idee> --skip-planner --eval-mode code-only"
 
 Alle Pfade in .opencode/opencode.json sind relativ → Ordner ist kopier-/versionierbar.
+# harness
