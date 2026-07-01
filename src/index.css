@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  background: #0a192f;
+  color: #ccd6f6;
+  overflow-x: hidden;
+}
+
+/* Light mode overrides */
+html:not(.dark) body {
+  background: #f0f4f8;
+  color: #1a2b45;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #233e6b;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2d4f80;
+  background-clip: content-box;
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(23, 42, 69, 0.55);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(100, 255, 218, 0.08);
+  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+html:not(.dark) .glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(100, 200, 200, 0.15);
+  box-shadow: 0 8px 32px -8px rgba(30, 50, 90, 0.15);
+}
+
+.glass-card-hover {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card-hover:hover {
+  border-color: rgba(100, 255, 218, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Gradient text for headings only */
+.gradient-text {
+  background: linear-gradient(135deg, #64ffda 0%, #4caf50 60%, #8892b0 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Focus ring */
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: 2px solid #64ffda;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Press state */
+.press {
+  transition: transform 0.1s ease;
+}
+.press:active {
+  transform: scale(0.96);
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(90deg, #172a45 25%, #1d3556 50%, #172a45 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* No flash dark mode: set base bg before React mounts */
+html.dark { background: #0a192f; }
+html:not(.dark) { background: #f0f4f8; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
