@@ -123,7 +123,7 @@
     "gan-planner": {
       "description": "GAN-Planner: Brief -> spec.md + eval-rubric.md",
       "mode": "all",
-      "model": "ollama/glm-5.2:cloud",
+      "model": "mlx/mlx-community/Qwen3-Coder-Next-8bit",
       "prompt": "{file:prompts/agents/gan-planner.md}",
       "tools": {
         "read": true,
@@ -135,7 +135,7 @@
     "gan-generator": {
       "description": "GAN-Generator: baut nach Spec, iteriert auf Feedback",
       "mode": "all",
-      "model": "mlx/mlx-community/Qwen3-Coder-Next-8bit",
+      "model": "ollama/glm-5.2:cloud",
       "prompt": "{file:prompts/agents/gan-generator.md}",
       "tools": {
         "read": true,
@@ -147,7 +147,7 @@
     "gan-evaluator": {
       "description": "GAN-Evaluator: testet & bewertet, schreibt Feedback",
       "mode": "all",
-      "model": "ollama/glm-5.2:cloud",
+      "model": "mlx/mlx-community/Qwen3-Coder-Next-8bit",
       "prompt": "{file:prompts/agents/gan-evaluator.md}",
       "tools": {
         "read": true,

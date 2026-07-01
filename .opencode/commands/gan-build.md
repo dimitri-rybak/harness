@@ -5,7 +5,7 @@ description: Run a generator/evaluator build loop for implementation tasks with 
 Parse the following from $ARGUMENTS:
 1. `brief` — the user's one-line description of what to build
 2. `--max-iterations N` — (optional, default 15) maximum generator-evaluator cycles
-3. `--pass-threshold N` — (optional, default 7.0) weighted score to pass
+3. `--pass-threshold N` — (optional, default 8.0) weighted score to pass
 4. `--skip-planner` — (optional) skip planner, assume spec.md already exists
 5. `--eval-mode MODE` — (optional, default "playwright") one of: playwright, screenshot, code-only
 
